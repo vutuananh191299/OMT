@@ -1,6 +1,5 @@
  @extends('/index')
 
-
  @section('content')
  <!-- Top News Start-->
         <div class="top-news">
@@ -16,6 +15,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="tn-img">
                                     <img src="https://genk.mediacdn.vn/139269124445442048/2020/11/6/photo-1-1604661312893718839093.jpg" />
@@ -24,6 +24,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -134,7 +135,9 @@
                                         <img src="{{$homem->url}}" />
                                     </div>
                                     <div class="tn-title">
-                                        <a href="{{ route('page', ['id' => $homem->id]) }}">{{$homem->describe}}</a>
+                                        <a href="{{ route('page', ['id' => $homem->id]) }}">
+                                            <p class="describe" style=" overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 5;">{{$homem->describe}}</p>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -146,7 +149,9 @@
                                         <img src="{{$homem->url}}" />
                                     </div>
                                     <div class="tn-title">
-                                        <a href="{{ route('page', ['id' => $homem->id]) }}">{{$homem->describe}}</a>
+                                        <a href="{{ route('page', ['id' => $homem->id]) }}">
+                                            <p  class="describe" style=" overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 5;">{{$homem->describe}}</p>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +162,9 @@
                                         <img src="{{$homem->url}}" />
                                     </div>
                                     <div class="tn-title">
-                                        <a href="{{ route('page', ['id' => $homem->id]) }}">{{$homem->describe}}</a>
+                                        <a href="{{ route('page', ['id' => $homem->id]) }}">
+                                            <p  class="describe" style=" overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 5;">{{$homem->describe}}</p>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +193,8 @@
                                         <img src="{{$homes->url}}" />
                                     </div>
                                     <div class="tn-title">
-                                        <a href="{{ route('page', ['id' => $homes->id]) }}">{{$homes->describe}}</a>
+                                        <a href="{{ route('page', ['id' => $homes->id]) }}">
+                                            <p  class="describe" style=" overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 5;">{{$homes->describe}}</p></a>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +204,8 @@
                                         <img src="{{$homes->url}}" />
                                     </div>
                                     <div class="tn-title">
-                                        <a href="{{ route('page', ['id' => $homes->id]) }}">{{$homes->describe}}</a>
+                                        <a href="{{ route('page', ['id' => $homes->id]) }}">
+                                            <p  class="describe" style=" overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 5;">{{$homes->describe}}</p></a>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +215,8 @@
                                         <img src="{{$homes->url}}" />
                                     </div>
                                     <div class="tn-title">
-                                        <a href="{{ route('page', ['id' => $homes->id]) }}">{{$homes->describe}}</a>
+                                        <a href="{{ route('page', ['id' => $homes->id]) }}">
+                                            <p class="describe" style=" overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 5;">{{$homes->describe}}</p></a>
                                     </div>
                                 </div>
                             </div>
@@ -229,7 +239,9 @@
                                 <div class="mn-img">
                                     <img src="{{$homes->url}}" />
                                     <div class="mn-title">
-                                        <a href="{{ route('page', ['id' => $homes->id]) }}">{{$homes->describe}}</a>
+                                        <a href="{{ route('page', ['id' => $homes->id]) }}">
+                                            <p  class="describe" style=" overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 5; color: white">{{$homes->describe}}</p>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -240,4 +252,5 @@
             </div>
         </div>
         <!-- Main News End-->
+
 @endsection

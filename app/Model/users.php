@@ -18,7 +18,6 @@ class users extends Authenticatable implements MustVerifyEmail
 
     public function get_login($email, $pass)
     {
-
         if(Auth::attempt(['email' => $email, 'password' => $pass])) {
             return Auth::user();
         }
@@ -28,5 +27,10 @@ class users extends Authenticatable implements MustVerifyEmail
     public function post()
     {
         return $this->hasMany('App\Model\post');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(role::class, 'role__users','id_user', 'id_role');
     }
 }

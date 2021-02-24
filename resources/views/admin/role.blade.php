@@ -21,11 +21,9 @@
         </div>
 
         <div class="row" style="clear: both;margin-top: 18px;">
-            @can('them')
             <div class="col-1 text-left">
                 <a href="javascript:void(0)" class="btn btn-success mb-3" id="create-new-post" onclick="addPost()">Add Post</a>
             </div>
-            @endcan
             <div class="col-4 text-left">
                 <input type="text" name="country_name" id="search" class="form-control input-lg" placeholder="Enter Country Name"/>
                 <div id="countryList"></div>
@@ -36,29 +34,24 @@
             <div class="col-12">
                 <table id="laravel_crud" class="table table-sm m-table m-table--head-bg-brand"
                        style="font-size: initial;font-family: auto;">
+                    @can('xem')
                     <thead>
                     <tr align='center'>
                         <th align='center'>STT</th>
-                        <th align='center'>Tiêu Đề</th>
-                        <th align='center'>Mô tả</th>
-                        <th align='center'>Tóm Tắt</th>
-                        <th align='center'>Nội Dung</th>
-                        <th align='center'>URL</th>
-                        <th align='center'>Tác Giả</th>
-                        <th align='center'>Action</th>
+                        <th align='center'>Name</th>
+                        <th align='center'>Code</th>
+                        <th align='center'>Permission</th>
                     </tr>
                     </thead>
-                    @can('xem')
-                    <tbody style=" overflow: hidden;-webkit-box-orient: vertical;-webkit-line-clamp: 5;">
+                    @endcan
+                    <tbody>
 
                     </tbody>
-                    @endcan
+
                 </table>
             </div>
         </div>
-
     </div>
-
     {{--CREAT--}}
     <div class="modal fade" id="post-modal" aria-hidden="true">
         <div class="modal-dialog">
@@ -82,7 +75,7 @@
 
         function addPost() {
             $.ajax({
-                url: 'insert',
+                url: 'insert_Role',
                 type: 'get',
                 data: {
                     "_token": "{{ csrf_token() }}",
@@ -98,12 +91,12 @@
         $(document).ready(function () {
             // Fetch records
             fetchRecords();
-            // fetch_customer_data();
+            {{--fetch_customer_data();--}}
 
             {{--function fetch_customer_data(query = '')--}}
             {{--{--}}
                 {{--$.ajax({--}}
-                    {{--url:"{{ route('live_search.action') }}",--}}
+                    {{--url:"{{ route('live_search.action_Role') }}",--}}
                     {{--method:'GET',--}}
                     {{--data:{query:query},--}}
                     {{--dataType:'json',--}}
@@ -115,24 +108,24 @@
                 {{--})--}}
             {{--}--}}
 
-            $(document).on('keypress', '#search', function(e){
-                var query = $(this).val();
-                if(e.which == 13) {
-                    fetchRecords(query);
-                }
-
-            });
-        })
+            {{--$(document).on('keyup', '#search', function(){--}}
+                {{--var query = $(this).val();--}}
+                {{--fetch_customer_data(query);--}}
+            {{--});--}}
+        });
+        $('#search').on('keyup', function () {
+            fetchRecords()
+        });
         //show
-        function fetchRecords(keyword = '') {
+        function fetchRecords() {
 
             $.ajax({
-                url: 'getUsers',
+                url: 'Role',
                 type: 'post',
                 // dataType: 'json',
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    keyword: keyword
+                    'search' : $('#search').val(),
                 },
                 success: function (response) {
                     $("#laravel_crud tbody").html(response);
@@ -141,22 +134,18 @@
         }
         //insert
         function insert() {
-            var title = $('#title').val();
-            var describe = $('#describe').val();
-            var content = $('#content').val();
-            var summary = $('#describe').val();
-            if (title == '' || describe == '' || content == '' || summary == '') {
+            var name = $('#name').val();
+            var code = $('#code').val();
+            if (name == '' || code == '' ) {
                 alert('Không được bỏ trống')
             } else {
                 $.ajax({
-                    url: 'insert',
+                    url: 'insert_Role',
                     type: 'post',
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        title: title,
-                        describe: describe,
-                        content: content,
-                        summary: summary
+                        name: name,
+                        code: code,
                     },
                     success: function (response) {
                         if (response == 1) {
@@ -172,8 +161,9 @@
         };
         //show_update
         function editPost(id) {
+            console.log(id)
             $.ajax({
-                url: 'update/' + id,
+                url: 'update_Role/' + id,
                 type: 'get',
                 data: {
                     "_token": "{{ csrf_token() }}",
@@ -186,22 +176,17 @@
         }
         //update
         function save(id) {
-            var title = $('#title_update').val();
-            var describe = $('#describe_update').val();
-            var content = $('#content_update').val();
-            var summary = $('#describe_update').val();
-            if (title == '' || describe == '' || content == '' || summary == '') {
+            var name = $('#name_update').val();
+            var code = $('#code_update').val();
+            if (name == '' || code == '') {
                 alert('Không được bỏ trống')
             } else {
                 $.ajax({
-                    url: 'update/' + id,
+                    url: 'update_Role/' + id,
                     type: 'post',
                     data: {"_token": "{{ csrf_token() }}",
-                    id: id,
-                    title: title,
-                    describe: describe,
-                    content: content,
-                    summary: summary},
+                        name: name,
+                        code: code,},
                     success: function (response) {
                         if (response == 1) {
                             alert('Sửa Thành Công');
@@ -212,12 +197,13 @@
                         }
                     }
                 });
+
             }
         }
         //delete
         function deleted(id){
             $.ajax({
-                url: 'delete/' + id,
+                url: 'delete_Role/' + id,
                 type: 'post',
                 data: {"_token": "{{ csrf_token() }}", id: id},
                 success: function (response) {
@@ -226,6 +212,28 @@
                 }
             });
         };
-    </script>
+        //
+        function getRole(role_id) {
 
+           var user_id =  $("#user_" + role_id + " option:selected").val();
+            $.ajax({
+                url: 'user_Role/'+ role_id +'/'+ user_id ,
+                type: 'post',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id_role: role_id,
+                    id_user: user_id,
+                },
+                success: function (response) {
+                    if (response == 1) {
+                        alert('Phân Quyền Thành Công');
+                        fetchRecords();
+                    } else {
+                        alert('Phân Quyền Thất Bại');
+                    }
+                }
+            });
+
+        }
+    </script>
 @endsection

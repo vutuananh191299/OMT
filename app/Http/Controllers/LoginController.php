@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Session;
-
+use Illuminate\Cookie\Middleware\Encrypt;
 use App\Model\users;
 use App\Http\Requests\Request_register;
 
@@ -28,21 +28,20 @@ class LoginController extends Controller
         $cus           = $cus->get_login($cus->email,$cus->pass);
 
         if(!empty($cus) && $cus->status==1){
-            Session::put('id',$cus->id);
-            Session::put('email',$cus->email);
             return redirect()->route("home")->with('messages',' Welcome user: ');
         }
         if (!empty($cus) && $cus->status==2){
-            Session::put('id',$cus->id);
-            Session::put('email',$cus->email);
+            return redirect()->route("admin")->with('messages',' Welcome user: ');
+        }
+        if (!empty($cus) && $cus->status==3){
             return redirect()->route("admin")->with('messages',' Welcome user: ');
         }
         return redirect()->route('login')->with('error1','Đăng nhập sai');
     }
     //logout_user
-    public function logout_user()
+    public function logout_user(Request $request)
     {
-        Session::forget('id');
+        $request->session()->flush();
 
         // Session::flush();
 
@@ -59,7 +58,7 @@ class LoginController extends Controller
         $password = $req->password;
         $data = array(
             'email' => $email,
-            'password' => $password,
+            'password' => bcrypt($password),
         );
         Users::insert($data);
         return redirect()->route('login');

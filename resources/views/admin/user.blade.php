@@ -21,11 +21,9 @@
         </div>
 
         <div class="row" style="clear: both;margin-top: 18px;">
-            @can('them')
             <div class="col-1 text-left">
                 <a href="javascript:void(0)" class="btn btn-success mb-3" id="create-new-post" onclick="addPost()">Add Post</a>
             </div>
-            @endcan
             <div class="col-4 text-left">
                 <input type="text" name="country_name" id="search" class="form-control input-lg" placeholder="Enter Country Name"/>
                 <div id="countryList"></div>
@@ -34,31 +32,24 @@
 
         <div class="row">
             <div class="col-12">
-                <table id="laravel_crud" class="table table-sm m-table m-table--head-bg-brand"
+                <table id="laravel_crud" class="table table-striped table-bordered "
                        style="font-size: initial;font-family: auto;">
                     <thead>
                     <tr align='center'>
                         <th align='center'>STT</th>
-                        <th align='center'>Tiêu Đề</th>
-                        <th align='center'>Mô tả</th>
-                        <th align='center'>Tóm Tắt</th>
-                        <th align='center'>Nội Dung</th>
-                        <th align='center'>URL</th>
-                        <th align='center'>Tác Giả</th>
-                        <th align='center'>Action</th>
+                        <th align='center'>Email</th>
+                        <th align='center'>Password</th>
                     </tr>
                     </thead>
-                    @can('xem')
-                    <tbody style=" overflow: hidden;-webkit-box-orient: vertical;-webkit-line-clamp: 5;">
+
+                    <tbody>
 
                     </tbody>
-                    @endcan
+
                 </table>
             </div>
         </div>
-
     </div>
-
     {{--CREAT--}}
     <div class="modal fade" id="post-modal" aria-hidden="true">
         <div class="modal-dialog">
@@ -82,7 +73,7 @@
 
         function addPost() {
             $.ajax({
-                url: 'insert',
+                url: 'insert_User',
                 type: 'get',
                 data: {
                     "_token": "{{ csrf_token() }}",
@@ -98,41 +89,37 @@
         $(document).ready(function () {
             // Fetch records
             fetchRecords();
-            // fetch_customer_data();
+            fetch_customer_data();
 
-            {{--function fetch_customer_data(query = '')--}}
-            {{--{--}}
-                {{--$.ajax({--}}
-                    {{--url:"{{ route('live_search.action') }}",--}}
-                    {{--method:'GET',--}}
-                    {{--data:{query:query},--}}
-                    {{--dataType:'json',--}}
-                    {{--success:function(data)--}}
-                    {{--{--}}
-                        {{--$('tbody').html(data.table_data);--}}
-                        {{--$('#total_records').text(data.total_data);--}}
-                    {{--}--}}
-                {{--})--}}
-            {{--}--}}
+            function fetch_customer_data(query = '')
+            {
+                $.ajax({
+                    url:"{{ route('live_search.action_User') }}",
+                    method:'GET',
+                    data:{query:query},
+                    dataType:'json',
+                    success:function(data)
+                    {
+                        $('tbody').html(data.table_data);
+                        $('#total_records').text(data.total_data);
+                    }
+                })
+            }
 
-            $(document).on('keypress', '#search', function(e){
+            $(document).on('keyup', '#search', function(){
                 var query = $(this).val();
-                if(e.which == 13) {
-                    fetchRecords(query);
-                }
-
+                fetch_customer_data(query);
             });
         })
         //show
-        function fetchRecords(keyword = '') {
+        function fetchRecords() {
 
             $.ajax({
-                url: 'getUsers',
+                url: 'Users',
                 type: 'post',
                 // dataType: 'json',
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    keyword: keyword
                 },
                 success: function (response) {
                     $("#laravel_crud tbody").html(response);
@@ -141,22 +128,18 @@
         }
         //insert
         function insert() {
-            var title = $('#title').val();
-            var describe = $('#describe').val();
-            var content = $('#content').val();
-            var summary = $('#describe').val();
-            if (title == '' || describe == '' || content == '' || summary == '') {
+            var email = $('#email').val();
+            var password = $('#password').val();
+            if (email == '' || password == '' ) {
                 alert('Không được bỏ trống')
             } else {
                 $.ajax({
-                    url: 'insert',
+                    url: 'insert_User',
                     type: 'post',
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        title: title,
-                        describe: describe,
-                        content: content,
-                        summary: summary
+                        email: email,
+                        password: password,
                     },
                     success: function (response) {
                         if (response == 1) {
@@ -173,7 +156,7 @@
         //show_update
         function editPost(id) {
             $.ajax({
-                url: 'update/' + id,
+                url: 'update_User/' + id,
                 type: 'get',
                 data: {
                     "_token": "{{ csrf_token() }}",
@@ -186,22 +169,18 @@
         }
         //update
         function save(id) {
-            var title = $('#title_update').val();
-            var describe = $('#describe_update').val();
-            var content = $('#content_update').val();
-            var summary = $('#describe_update').val();
-            if (title == '' || describe == '' || content == '' || summary == '') {
+            var email = $('#email_update').val();
+            console.log(email)
+            var password = $('#password_update').val();
+            if (email == '' || password == '') {
                 alert('Không được bỏ trống')
             } else {
                 $.ajax({
-                    url: 'update/' + id,
+                    url: 'update_User/' + id,
                     type: 'post',
                     data: {"_token": "{{ csrf_token() }}",
-                    id: id,
-                    title: title,
-                    describe: describe,
-                    content: content,
-                    summary: summary},
+                        email: email,
+                        password: password,},
                     success: function (response) {
                         if (response == 1) {
                             alert('Sửa Thành Công');
@@ -212,12 +191,14 @@
                         }
                     }
                 });
+
             }
         }
         //delete
         function deleted(id){
+            console.log(id)
             $.ajax({
-                url: 'delete/' + id,
+                url: 'delete_user/' + id,
                 type: 'post',
                 data: {"_token": "{{ csrf_token() }}", id: id},
                 success: function (response) {
@@ -227,5 +208,4 @@
             });
         };
     </script>
-
 @endsection
